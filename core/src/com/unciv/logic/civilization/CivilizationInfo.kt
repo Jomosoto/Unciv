@@ -78,6 +78,10 @@ class CivilizationInfo {
     var citiesCreated = 0
     var exploredTiles = HashSet<Vector2>()
 
+    var extraDelegations = 0
+    var unVotes = 0
+    var voted = false
+
     constructor()
 
     constructor(civName: String) {
@@ -109,6 +113,8 @@ class CivilizationInfo {
         toReturn.popupAlerts.addAll(popupAlerts)
         toReturn.tradeRequests.addAll(tradeRequests)
         toReturn.naturalWonders.addAll(naturalWonders)
+        toReturn.extraDelegations = extraDelegations
+        toReturn.unVotes = unVotes
         return toReturn
     }
 
@@ -227,6 +233,11 @@ class CivilizationInfo {
         return tech.currentTechnology() == null && cities.isNotEmpty()
     }
 
+    fun shouldOpenUnVote(): Boolean {
+        if(!voted && gameInfo.unCountdown == 0)
+            return true
+        return false
+    }
 
 
     fun getEquivalentBuilding(buildingName:String): Building {

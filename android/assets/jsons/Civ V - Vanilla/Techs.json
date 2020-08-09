@@ -588,8 +588,14 @@
 		"wonderCost": 1250,
 		"techs": [
 			{
+				"name": "Globalization",
+				"row": 3,
+				"prerequisites": ["Mobile Tactics"],
+				"quote": "'The new electronic interdependence recreates the world in the image of a global village.' - Marshall McLuhan"
+			},
+			{
 				"name": "Particle Physics",
-				"row": 4,
+				"row": 5,
 				"prerequisites": ["Mobile Tactics","Satellites"],
 				"quote": "'Every particle of matter is attracted by or gravitates to every other particle of matter with a force inversely proportional to the squares of their distances.' - Isaac Newton"
 			},
@@ -611,7 +617,7 @@
 			{
 				"name": "Future Tech",
 				"row": 5,
-				"prerequisites": ["Nanotechnology","Particle Physics","Satellites"],
+				"prerequisites": ["Globalization","Nanotechnology","Particle Physics"],
 				"uniques": ["Who knows what the future holds?"],
 				"quote": "'I think we agree, the past is over.' - George W. Bush"
 			}

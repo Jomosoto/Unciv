@@ -23,10 +23,7 @@ import com.unciv.models.ruleset.tile.ResourceType
 import com.unciv.models.ruleset.unit.UnitType
 import com.unciv.models.translations.tr
 import com.unciv.ui.cityscreen.CityScreen
-import com.unciv.ui.pickerscreens.GreatPersonPickerScreen
-import com.unciv.ui.pickerscreens.PolicyPickerScreen
-import com.unciv.ui.pickerscreens.TechButton
-import com.unciv.ui.pickerscreens.TechPickerScreen
+import com.unciv.ui.pickerscreens.*
 import com.unciv.ui.trade.DiplomacyScreen
 import com.unciv.ui.utils.*
 import com.unciv.ui.victoryscreen.VictoryScreen
@@ -571,6 +568,12 @@ class WorldScreen(val viewingCiv:CivilizationInfo) : CameraStageBaseScreen() {
             viewingCiv.policies.shouldOpenPolicyPicker || (viewingCiv.policies.freePolicies > 0 && viewingCiv.policies.canAdoptPolicy())  ->
                 NextTurnAction("Pick a policy", Color.VIOLET) {
                     game.setScreen(PolicyPickerScreen(this))
+                    viewingCiv.policies.shouldOpenPolicyPicker = false
+                }
+
+            viewingCiv.shouldOpenUnVote()  ->
+                NextTurnAction("Vote for the world leader", Color.GREEN) {
+                    game.setScreen(UnVotePickerScreen(viewingCiv))
                     viewingCiv.policies.shouldOpenPolicyPicker = false
                 }
 

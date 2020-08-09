@@ -16,6 +16,8 @@ import com.unciv.models.ruleset.Ruleset
 import com.unciv.models.ruleset.RulesetCache
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.roundToInt
+import kotlin.math.roundToLong
 
 class UncivShowableException(missingMods: String) : Exception(missingMods)
 
@@ -44,6 +46,8 @@ class GameInfo {
     var simulateMaxTurns: Int = 1000
     var simulateUntilWin = false
 
+    var unCountdown = -1;
+
     //region pure functions
     fun clone(): GameInfo {
         val toReturn = GameInfo()
@@ -55,6 +59,7 @@ class GameInfo {
         toReturn.gameParameters = gameParameters
         toReturn.gameId = gameId
         toReturn.oneMoreTurnMode = oneMoreTurnMode
+        toReturn.unCountdown = unCountdown
         return toReturn
     }
 
@@ -83,6 +88,7 @@ class GameInfo {
             currentPlayerIndex = (currentPlayerIndex+1) % civilizations.size
             if(currentPlayerIndex==0){
                 turns++
+                manageUnVote()
             }
             thisPlayer = civilizations[currentPlayerIndex]
             thisPlayer.startTurn()
@@ -160,6 +166,23 @@ class GameInfo {
         }
     }
 
+    private fun manageUnVote()
+    {
+        --unCountdown
+        if(unCountdown == 0) {
+
+            println("drin")
+            val ranking = civilizations.filter { it.isMajorCiv() }.sortedByDescending{it.unVotes}
+            if (ranking.isNotEmpty() && civilizations.sumBy { it.unVotes } != 0) ++ranking[0].extraDelegations
+            if (ranking.size > 1 && civilizations.sumBy { it.unVotes } != 0) ++ranking[1].extraDelegations
+
+            civilizations.forEach { it.unVotes = 0 }
+            ++civilizations.first { it.cities.any { it.containsBuildingUnique("Triggers world leader vote") } }.unVotes
+            civilizations.forEach { it.unVotes += it.extraDelegations }
+        }
+        else if(unCountdown == -1)
+            unCountdown += (10*gameParameters.gameSpeed.modifier).roundToInt()
+    }
 
     fun placeBarbarians() {
         val encampments = tileMap.values.filter { it.improvement == Constants.barbarianEncampment }
@@ -232,6 +255,7 @@ class GameInfo {
                 && it.exploredTiles.contains(tile.position) }
                 .forEach { it.addNotification("A new barbarian encampment has spawned!", tile.position, Color.RED) }
     }
+
 
     // All cross-game data which needs to be altered (e.g. when removing or changing a name of a building/tech)
     // will be done here, and not in CivInfo.setTransients or CityInfo

@@ -16,6 +16,7 @@ import com.unciv.models.ruleset.tech.Technology
 import com.unciv.models.translations.tr
 import java.lang.reflect.Modifier
 import kotlin.math.min
+import kotlin.math.roundToInt
 
 object NextTurnAutomation{
 
@@ -25,6 +26,7 @@ object NextTurnAutomation{
 
         respondToPopupAlerts(civInfo)
         respondToTradeRequests(civInfo)
+        voteForWorldLeader(civInfo)
 
         if(civInfo.isMajorCiv()) {
             declareWar(civInfo)
@@ -194,6 +196,7 @@ object NextTurnAutomation{
                         VictoryType.Cultural -> listOf("Piety", "Freedom", "Tradition", "Rationalism")
                         VictoryType.Scientific -> listOf("Rationalism", "Commerce", "Liberty", "Freedom")
                         VictoryType.Domination -> listOf("Autocracy", "Honor", "Liberty", "Rationalism")
+                        VictoryType.Diplomatic -> listOf("Patronage", "Commerce", "Freedom")
                         VictoryType.Neutral -> listOf()
                     }
             val policiesByPreference = adoptablePolicies
@@ -206,6 +209,18 @@ object NextTurnAutomation{
 
             val policyToAdopt = preferredPolicies.random()
             civInfo.policies.adopt(policyToAdopt)
+        }
+    }
+
+    private fun voteForWorldLeader(civInfo: CivilizationInfo) {
+        println(civInfo.civName)
+        if(civInfo.gameInfo.unCountdown == 0)
+        {
+            if(civInfo.isMajorCiv()) ++civInfo.unVotes
+            else
+            {
+                civInfo.gameInfo.civilizations.find {it.civName == civInfo.allyCivName}?.let { ++it.unVotes; println(it.unVotes) }
+            }
         }
     }
 

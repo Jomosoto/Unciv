@@ -2,6 +2,7 @@ package com.unciv.logic.civilization
 
 import com.unciv.models.Counter
 import com.unciv.models.ruleset.VictoryType
+import kotlin.math.roundToInt
 
 class VictoryManager {
     @Transient lateinit var civInfo: CivilizationInfo
@@ -39,11 +40,21 @@ class VictoryManager {
     fun hasWonDominationVictory() = civInfo.gameInfo.gameParameters.victoryTypes.contains(VictoryType.Domination)
             && civInfo.gameInfo.civilizations.all { it==civInfo || it.isDefeated() || !it.isMajorCiv() }
 
+    fun hasWonDiplomaticVictory() : Boolean
+    {
+        println(civInfo.civName + "  -  Votes: " + civInfo.unVotes + "  Delegates: " + civInfo.extraDelegations + "  Total UnVotes: " + civInfo.gameInfo.civilizations.sumBy { it.unVotes })
+        return civInfo.gameInfo.gameParameters.victoryTypes.contains(VictoryType.Diplomatic)
+                && civInfo.gameInfo.civilizations.sumBy { it.unVotes } != 0
+                && civInfo.gameInfo.unCountdown == (10*civInfo.gameInfo.gameParameters.gameSpeed.modifier).roundToInt()-1
+                && civInfo.unVotes >= civInfo.gameInfo.civilizations.sumBy { it.unVotes }.toFloat()/2
+    }
+
     fun hasWonVictoryType(): VictoryType? {
         if(!civInfo.isMajorCiv()) return null
         if(hasWonDominationVictory()) return VictoryType.Domination
         if(hasWonScientificVictory()) return VictoryType.Scientific
         if(hasWonCulturalVictory()) return VictoryType.Cultural
+        if(hasWonDiplomaticVictory()) return VictoryType.Diplomatic
         return null
     }
 

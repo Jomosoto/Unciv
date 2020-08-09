@@ -9,6 +9,7 @@ import com.unciv.models.stats.Stat
 import com.unciv.models.stats.Stats
 import com.unciv.models.translations.tr
 import kotlin.math.pow
+import kotlin.math.roundToInt
 
 class Building : NamedStats(), IConstruction{
 
@@ -396,6 +397,7 @@ class Building : NamedStats(), IConstruction{
 
         if("Free Technology" in uniques) civInfo.tech.freeTechs += 1
 
+        if("Triggers world leader vote" in uniques) civInfo.gameInfo.unCountdown = (10*civInfo.gameInfo.gameParameters.gameSpeed.modifier).roundToInt()
 
         cityConstructions.cityInfo.cityStats.update() // new building, new stats
         civInfo.updateDetailedCivResources() // this building/unit could be a resource-requiring one

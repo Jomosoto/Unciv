@@ -13,7 +13,8 @@ enum class VictoryType{
     Neutral,
     Cultural,
     Domination,
-    Scientific
+    Scientific,
+    Diplomatic
 }
 
 class Nation : INamed {

@@ -947,5 +947,15 @@
 		"requiredResource": "Aluminum",
 		"requiredTech": "Nanotechnology",
 		"uniques": ["Spaceship part"]
+	},
+	{
+		"name": "United Nations",
+		"isWonder": true,
+		"culture": 1,
+		"greatPersonPoints": {"gold": 2},
+		"uniques": ["Triggers world leader vote"],
+		"cost": 1,
+		"requiredTech": "Globalization",
+		"quote": "'More than ever before in human history, we share a common destiny. We can master it only if we face it together. And that is why we have the United Nations.'  - Kofi Annan "
 	}
 ]

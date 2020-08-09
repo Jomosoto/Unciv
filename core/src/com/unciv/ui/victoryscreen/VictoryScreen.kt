@@ -54,6 +54,7 @@ class VictoryScreen(val worldScreen: WorldScreen) : PickerScreen() {
                 VictoryType.Cultural -> wonOrLost("You have won a cultural victory!")
                 VictoryType.Domination -> wonOrLost("You have won a domination victory!") // todo change translation
                 VictoryType.Scientific -> wonOrLost("You have won a scientific victory!")
+                VictoryType.Diplomatic -> wonOrLost("You have won a diplomatic victory!")
             }
         }
         for(civ in game.gameInfo.civilizations.filter { it.isMajorCiv() && it!=playerCivInfo }){
@@ -65,6 +66,7 @@ class VictoryScreen(val worldScreen: WorldScreen) : PickerScreen() {
                     VictoryType.Cultural -> wonOrLost("[$winningCivName] has won a cultural victory!")
                     VictoryType.Domination -> wonOrLost("[$winningCivName] has won a domination victory!")
                     VictoryType.Scientific -> wonOrLost("[$winningCivName] has  won a scientific victory!")
+                    VictoryType.Diplomatic -> wonOrLost("[$winningCivName] has  won a diplomatic victory!")
                 }
             }
         }
@@ -82,7 +84,10 @@ class VictoryScreen(val worldScreen: WorldScreen) : PickerScreen() {
             "You have won a cultural victory!" -> "You have achieved victory through the awesome power of your Culture. Your civilization's greatness - the magnificence of its monuments and the power of its artists - have astounded the world! Poets will honor you as long as beauty brings gladness to a weary heart."
             "You have won a domination victory!" -> "The world has been convulsed by war. Many great and powerful civilizations have fallen, but you have survived - and emerged victorious! The world will long remember your glorious triumph!"
             "You have won a scientific victory!" -> "You have achieved victory through mastery of Science! You have conquered the mysteries of nature and led your people on a voyage to a brave new world! Your triumph will be remembered as long as the stars burn in the night sky!"
+            "You have won a diplomatic victory!" -> "You have triumphed over your foes through the art of Diplomacy! Your cunning and wisdom have earned you great friends - and divided and sown confusion among your enemies! Forever will you be remembered as the leader who brought peace to a weary world!"
+
             else -> "You have been defeated. Your civilization has been overwhelmed by its many foes. But your people do not despair, for they know that one day you shall return - and lead them forward to victory!"
+
         }
 
         descriptionLabel.setText(description.tr()+"\n"+endGameMessage.tr() )
